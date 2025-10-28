@@ -30,7 +30,13 @@
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "clean": "rm -rf dist coverage",
     "prebuild": "npm run clean",
-    "validate": "npm run lint && npm run type-check && npm run test:coverage && npm run build"
+    "validate": "npm run lint && npm run type-check && npm run test:coverage && npm run build",
+    "wrangler:dev": "wrangler dev",
+    "wrangler:deploy": "wrangler deploy",
+    "wrangler:tail": "wrangler tail",
+    "cf:login": "wrangler login",
+    "cf:deploy": "npm run build && wrangler deploy",
+    "cf:dev": "npm run build && wrangler dev"
   },
   "keywords": [
     "mcp",
@@ -64,6 +70,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
     "@types/node": "^22.10.5",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
@@ -75,7 +82,8 @@
     "eslint-plugin-jsdoc": "^48.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.7.2",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "wrangler": "^3.94.0"
   },
   "engines": {
     "node": ">=18.0.0"

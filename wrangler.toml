@@ -1,0 +1,37 @@
+# Cloudflare Workers configuration for Quran MCP Server
+# Streamable HTTP/SSE server deployment
+
+name = "quran-mcp-server"
+main = "dist/http-server.js"
+compatibility_date = "2024-01-01"
+node_compat = true
+
+# Account details (will be set via wrangler login)
+# account_id = "your-account-id"
+
+# Worker settings
+workers_dev = true
+
+# Routes (uncomment and configure for custom domain)
+# routes = [
+#   { pattern = "quran-mcp.yourdomain.com/*", zone_name = "yourdomain.com" }
+# ]
+
+# Environment variables (optional)
+[vars]
+# Add any environment variables here if needed
+# API_KEY = "your-api-key"
+
+# Build configuration
+[build]
+command = "npm run build"
+
+# Limits - CPU limits require paid plan
+# [limits]
+# cpu_ms = 50000  # 50 seconds CPU time per request (generous for search operations)
+
+# Development settings
+[dev]
+port = 8787
+local_protocol = "http"
+
