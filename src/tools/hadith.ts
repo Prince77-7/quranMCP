@@ -3,9 +3,9 @@
  * Provides access to various Hadith collections
  */
 
-import { fetchJSON } from '../services/fetcher.js';
-import { hadithCacheService } from '../services/cache.js';
 import { API_ENDPOINTS, HADITH_COLLECTIONS } from '../constants/index.js';
+import { hadithCacheService } from '../services/cache.js';
+import { fetchJSON } from '../services/fetcher.js';
 import { HadithResponse, QuranMCPError } from '../types/index.js';
 
 /**
@@ -48,15 +48,38 @@ export async function getHadith(
     for (const url of endpoints) {
       try {
         const data = await fetchJSON<any>(url);
-        
+
+        // Handle the actual API structure: { metadata: {...}, hadiths: [{text: "..."}] }
+        let text = '';
+        let book = undefined;
+        let chapter = undefined;
+        let grade = undefined;
+        let narrator = undefined;
+
+        if (data.hadiths && Array.isArray(data.hadiths) && data.hadiths.length > 0) {
+          // Find the hadith with matching number
+          const hadith = data.hadiths.find((h: any) => h.hadithnumber === hadithNumber) || data.hadiths[0];
+          text = hadith.text || '';
+          book = hadith.reference?.book;
+          chapter = data.metadata?.section?.[book];
+          grade = hadith.grades?.[0];
+        } else {
+          // Fallback to old structure
+          text = data.text || data.hadith || '';
+          book = data.book;
+          chapter = data.chapter || data.chapterName;
+          grade = data.grade;
+          narrator = data.narrator;
+        }
+
         return {
           hadithNumber,
           collection: collectionInfo.name,
-          book: data.book || undefined,
-          chapter: data.chapter || data.chapterName || undefined,
-          text: data.text || data.hadith || '',
-          grade: data.grade || undefined,
-          narrator: data.narrator || undefined,
+          book,
+          chapter,
+          text,
+          grade,
+          narrator,
         };
       } catch (error) {
         lastError = error as Error;
@@ -87,7 +110,7 @@ export function listHadithCollections() {
  */
 export async function getRandomHadith(collection?: string): Promise<HadithResponse> {
   // If no collection specified, pick a random one
-  const selectedCollection = collection || 
+  const selectedCollection = collection ||
     HADITH_COLLECTIONS[Math.floor(Math.random() * HADITH_COLLECTIONS.length)].slug;
 
   const collectionInfo = HADITH_COLLECTIONS.find(c => c.slug === selectedCollection);
@@ -115,7 +138,7 @@ export async function searchHadith(
 ): Promise<HadithResponse[]> {
   const results: HadithResponse[] = [];
   const searchCollection = collection || 'bukhari'; // Default to Bukhari
-  
+
   const collectionInfo = HADITH_COLLECTIONS.find(c => c.slug === searchCollection);
   if (!collectionInfo) {
     throw new QuranMCPError(
@@ -131,7 +154,7 @@ export async function searchHadith(
 
   for (let i = 0; i < attempts && results.length < limit; i++) {
     const randomNum = Math.floor(Math.random() * collectionInfo.totalHadiths) + 1;
-    
+
     if (tried.has(randomNum)) continue;
     tried.add(randomNum);
 
