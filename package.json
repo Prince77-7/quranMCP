@@ -1,9 +1,18 @@
 {
-  "name": "quran-mcp-server",
-  "version": "1.0.0",
-  "description": "A comprehensive Model Context Protocol server for Quranic resources - Tafsir, Hadith, Quran text, translations, and recitations",
+  "name": "@quranmcp/server",
+  "version": "2.0.0",
+  "description": "A revolutionary Model Context Protocol server for Islamic resources - Search Quran & Hadith by keywords, access Tafsir, translations, and recitations. Works with any MCP-compatible AI agent.",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "quran-mcp-server": "dist/index.js",
+    "quran-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -31,8 +40,22 @@
     "islamic",
     "ai",
     "llm",
-    "model-context-protocol"
+    "model-context-protocol",
+    "search",
+    "claude",
+    "chatgpt",
+    "islamic-resources",
+    "quran-search",
+    "hadith-search"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Prince77-7/quranMCP.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Prince77-7/quranMCP/issues"
+  },
+  "homepage": "https://github.com/Prince77-7/quranMCP#readme",
   "author": "Quran MCP Team",
   "license": "MIT",
   "dependencies": {

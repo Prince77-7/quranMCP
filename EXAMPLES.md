@@ -3,11 +3,174 @@
 This document provides comprehensive examples of how to use the Quran MCP Server with Claude or other MCP clients.
 
 ## Table of Contents
+- [🔍 NEW! Search Queries](#-new-search-queries)
 - [Basic Quran Queries](#basic-quran-queries)
 - [Tafsir Queries](#tafsir-queries)
 - [Hadith Queries](#hadith-queries)
 - [Recitation Queries](#recitation-queries)
 - [Advanced Queries](#advanced-queries)
+
+## 🔍 NEW! Search Queries
+
+### Search Quran by Keywords
+
+**Query**: "Find verses about patience in the Quran"
+
+**Tool Call**:
+```json
+{
+  "tool": "search_quran",
+  "arguments": {
+    "query": "patience",
+    "translation": "en.sahih",
+    "max_results": 10
+  }
+}
+```
+
+**Response**:
+```json
+[
+  {
+    "surah": 2,
+    "ayah": 153,
+    "surahName": "Al-Baqarah",
+    "text": "O you who have believed, seek help through patience and prayer. Indeed, Allah is with the patient.",
+    "translation": "Sahih International",
+    "relevanceScore": 15
+  },
+  {
+    "surah": 3,
+    "ayah": 200,
+    "surahName": "Ali 'Imran",
+    "text": "O you who have believed, persevere and endure and remain stationed and fear Allah that you may be successful.",
+    "translation": "Sahih International",
+    "relevanceScore": 10
+  }
+]
+```
+
+### Search Quran with Multiple Keywords
+
+**Query**: "Find verses about prayer and patience together"
+
+**Tool Call**:
+```json
+{
+  "tool": "search_quran",
+  "arguments": {
+    "query": "prayer patience",
+    "translation": "en.sahih",
+    "max_results": 5
+  }
+}
+```
+
+### Search Quran by Phrase
+
+**Query**: "Find verses containing 'those who believe'"
+
+**Tool Call**:
+```json
+{
+  "tool": "search_quran",
+  "arguments": {
+    "query": "those who believe",
+    "translation": "en.sahih",
+    "max_results": 20
+  }
+}
+```
+
+### Search Quran by Topic
+
+**Query**: "Show me verses about mercy"
+
+**Tool Call**:
+```json
+{
+  "tool": "search_quran_by_topic",
+  "arguments": {
+    "topic": "mercy",
+    "translation": "en.sahih",
+    "max_results": 10
+  }
+}
+```
+
+**Available Topics:**
+- prayer, patience, charity, faith, paradise, hell
+- prophet, allah, mercy, justice, knowledge
+- family, death, creation, guidance
+
+### Search Hadith by Keywords
+
+**Query**: "Find hadiths about charity"
+
+**Tool Call**:
+```json
+{
+  "tool": "search_hadith",
+  "arguments": {
+    "query": "charity",
+    "collections": ["bukhari", "muslim"],
+    "max_results": 10
+  }
+}
+```
+
+**Response**:
+```json
+[
+  {
+    "hadithNumber": 1411,
+    "collection": "bukhari",
+    "collectionName": "Sahih Bukhari",
+    "text": "The Prophet said: 'Charity does not decrease wealth...'",
+    "book": "Book of Zakat",
+    "chapter": "Excellence of Charity",
+    "relevanceScore": 20
+  }
+]
+```
+
+### Search Hadith by Topic
+
+**Query**: "Find hadiths about prayer"
+
+**Tool Call**:
+```json
+{
+  "tool": "search_hadith_by_topic",
+  "arguments": {
+    "topic": "prayer",
+    "collections": ["bukhari"],
+    "max_results": 10
+  }
+}
+```
+
+**Available Topics:**
+- prayer, fasting, charity, hajj, faith
+- prophet, companions, knowledge, manners
+- family, marriage, death, jihad, repentance
+
+### Search All Hadith Collections
+
+**Query**: "Search for hadiths about parents in all collections"
+
+**Tool Call**:
+```json
+{
+  "tool": "search_hadith",
+  "arguments": {
+    "query": "parents mother father",
+    "max_results": 15
+  }
+}
+```
+
+Note: When `collections` is omitted, it searches all 6 major collections.
 
 ## Basic Quran Queries
 

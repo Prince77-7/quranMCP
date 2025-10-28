@@ -1,14 +1,24 @@
-# Quran MCP Server 🕌
+# Quran MCP Server 🕌 - Revolutionary Islamic AI Assistant
 
-A comprehensive **Model Context Protocol (MCP)** server providing AI assistants with access to Islamic resources including the Quran, Tafsir, Hadith, and recitations.
+[![npm version](https://badge.fury.io/js/%40quranmcp%2Fserver.svg)](https://www.npmjs.com/package/@quranmcp/server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🌟 Features
+A **revolutionary** Model Context Protocol (MCP) server that gives AI assistants powerful access to Islamic resources. The first MCP server with **intelligent keyword search** for Quran and Hadith - no more needing exact verse numbers!
 
-### 📖 Quran Access
+## ✨ What Makes This Revolutionary?
+
+### 🔍 **Intelligent Search** (NEW!)
+- **Search Quran by Keywords**: Find verses about "patience", "prayer", "mercy" without knowing verse numbers
+- **Search Hadith by Topics**: Discover hadiths about "charity", "fasting", "manners" instantly
+- **Topic-Based Discovery**: AI understands common Islamic topics and finds relevant content
+- **Natural Language Queries**: Ask "find verses about patience" and get instant results
+
+### 📖 Comprehensive Quran Access
 - **Arabic Text**: Original Quranic text in Arabic
 - **Multiple Translations**: English translations from renowned scholars (Asad, Sahih International, Pickthall, Yusuf Ali, Hilali & Khan)
 - **Full Surah Retrieval**: Get complete chapters with or without translations
 - **Random Verse**: Daily inspiration feature
+- **Verse-by-Verse Access**: Traditional reference-based lookup
 
 ### 📚 Tafsir (Commentary)
 - **Multiple Sources**: Access to various Tafsir collections
@@ -44,68 +54,98 @@ A comprehensive **Model Context Protocol (MCP)** server providing AI assistants 
 - **Type Safety**: Full TypeScript implementation with strict mode
 - **Validation**: Input validation for all parameters
 
-## 🚀 Installation
+## 🚀 Installation - Just Copy & Paste!
 
-### Prerequisites
-- Node.js 18.0.0 or higher
-- npm or yarn
+### Step 1: Add to Your AI Agent
 
-### Setup
-
-1. **Clone or download this repository**
-
-2. **Install dependencies**:
-```bash
-npm install
-```
-
-3. **Build the project**:
-```bash
-npm run build
-```
-
-## 📋 Usage
-
-### With Claude Desktop
-
-Add this configuration to your Claude Desktop config file:
-
-**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+**Claude Desktop** - Add this to your config file:
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "quran": {
-      "command": "node",
-      "args": [
-        "/ABSOLUTE/PATH/TO/quranMCP/dist/index.js"
-      ]
+      "command": "npx",
+      "args": ["@quranmcp/server"]
     }
   }
 }
 ```
 
-Replace `/ABSOLUTE/PATH/TO/quranMCP` with the actual path to this project.
+### Step 2: Restart Claude
 
-### Standalone Usage
+### Step 3: Done! 🎉
 
-Run the server directly:
-```bash
-npm start
+Ask: **"Search the Quran for verses about patience"**
+
+---
+
+**Works with any MCP-compatible AI agent** - just use the same JSON configuration!
+
+## 🛠️ Available Tools (18 Total)
+
+### 🔍 NEW! Search Tools (Revolutionary)
+
+#### `search_quran`
+**Search the Quran by keywords or phrases** - Find verses without knowing exact references!
+```json
+{
+  "query": "patience",
+  "translation": "en.sahih",
+  "max_results": 20
+}
 ```
 
-Or use the MCP Inspector for testing:
-```bash
-npm run inspector
+**Example Queries:**
+- "patience" - Find all verses about patience
+- "those who believe" - Find verses with this phrase
+- "prayer" - Discover verses about prayer
+- "mercy forgiveness" - Multiple keywords
+
+#### `search_hadith`
+**Search Hadith collections by keywords** - Discover hadiths about any topic!
+```json
+{
+  "query": "charity",
+  "collections": ["bukhari", "muslim"],
+  "max_results": 20
+}
 ```
 
-## 🛠️ Available Tools
+**Example Queries:**
+- "prayer times" - Find hadiths about prayer
+- "fasting ramadan" - Hadiths about fasting
+- "parents" - Hadiths about treating parents
 
-### Quran Tools
+#### `search_quran_by_topic`
+**Search by predefined Islamic topics** - AI-optimized topic search!
+```json
+{
+  "topic": "patience",
+  "translation": "en.sahih",
+  "max_results": 10
+}
+```
+
+**Available Topics:** prayer, patience, charity, faith, paradise, hell, prophet, allah, mercy, justice, knowledge, family, death, creation, guidance
+
+#### `search_hadith_by_topic`
+**Search Hadith by Islamic topics** - Topic-based hadith discovery!
+```json
+{
+  "topic": "prayer",
+  "collections": ["bukhari"],
+  "max_results": 10
+}
+```
+
+**Available Topics:** prayer, fasting, charity, hajj, faith, prophet, companions, knowledge, manners, family, marriage, death, jihad, repentance
+
+### 📖 Quran Tools
 
 #### `get_quran_verse`
-Get a verse with Arabic text and translation.
+Get a specific verse with Arabic text and translation.
 ```json
 {
   "surah": 1,
@@ -204,18 +244,35 @@ List all available translations.
 #### `get_cache_stats`
 Get cache statistics for monitoring.
 
-## 📚 Example Queries for Claude
+## 💬 Example Queries for AI Assistants
 
-Once configured, you can ask Claude:
+Once configured, you can ask your AI assistant natural language questions:
 
+### 🔍 Search Queries (NEW!)
+- **"Find verses about patience in the Quran"**
+- **"Search for hadiths about charity"**
+- **"Show me Quranic verses about prayer"**
+- **"Find hadiths about treating parents"**
+- **"What does the Quran say about mercy?"**
+- **"Search for verses containing 'those who believe'"**
+- **"Find hadiths about fasting in Ramadan"**
+
+### 📖 Traditional Queries
 - "Show me Ayat al-Kursi (verse 2:255) with translation and tafsir"
 - "Get me a random verse from the Quran for today"
 - "What does Surah Al-Fatiha say?"
 - "Show me hadith number 1 from Sahih Bukhari"
-- "Give me a random hadith about prayer"
+- "Give me a random hadith"
 - "Get the audio recitation URL for Surah Yasin"
 - "List all available Quran translations"
 - "What is the information about Surah Al-Baqarah?"
+
+### 🎯 AI Understanding
+The AI assistant now understands it can:
+- Search by keywords instead of requiring exact verse numbers
+- Find content by topic without knowing references
+- Discover related verses and hadiths through natural language
+- Combine search with traditional lookup for comprehensive study
 
 ## 🏗️ Architecture
 
@@ -268,16 +325,58 @@ This server aggregates data from multiple trusted Islamic resources:
 - **Quran Translations**: [AlQuran Cloud API](https://alquran.cloud/api)
 - **Recitations**: [EveryAyah.com](https://everyayah.com)
 
+## 🎯 Why This MCP Server is Revolutionary
+
+### Before This Server:
+- ❌ Had to know exact Surah and Ayah numbers
+- ❌ Couldn't search by keywords or topics
+- ❌ Required manual lookup in external resources
+- ❌ Limited to reference-based queries
+
+### With This Server:
+- ✅ **Natural language search** - "find verses about patience"
+- ✅ **Keyword-based discovery** - Search entire Quran and Hadith collections
+- ✅ **Topic-aware AI** - AI understands Islamic topics and finds relevant content
+- ✅ **Universal compatibility** - Works with any MCP-compatible AI agent
+- ✅ **Zero-install option** - Use with NPX instantly
+- ✅ **Intelligent caching** - Fast responses with smart caching
+- ✅ **18 powerful tools** - Comprehensive Islamic resource access
+
+### Real-World Impact:
+- **Students**: Discover verses and hadiths for research without memorizing references
+- **Educators**: Quickly find relevant Islamic texts for teaching
+- **Researchers**: Search across multiple sources simultaneously
+- **Daily Users**: Get instant answers to Islamic questions
+- **Developers**: Build Islamic AI applications with ease
+
 ## 🤝 Contributing
 
-Contributions are welcome! Areas for improvement:
+Contributions are welcome! This is an open-source project for the Muslim community.
 
-- Additional Tafsir sources
+**Priority Areas:**
+- Additional Tafsir sources (more languages)
 - More Hadith collections
-- Additional translations
-- Search functionality
-- Thematic indexing
+- Additional translations (Urdu, Arabic, French, etc.)
+- Enhanced search algorithms
+- Thematic indexing improvements
 - Juz/Hizb navigation
+- Performance optimizations
+
+**How to Contribute:**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📦 Package Information
+
+- **NPM Package:** [@quranmcp/server](https://www.npmjs.com/package/@quranmcp/server)
+- **Version:** 2.0.0
+- **License:** MIT
+- **Repository:** [GitHub](https://github.com/Prince77-7/quranMCP)
+- **Size:** 34.3 kB (compressed)
+- **Node.js:** >= 18.0.0
 
 ## 📄 License
 
@@ -291,9 +390,17 @@ MIT License - feel free to use this in your projects!
 
 ## 📞 Support
 
-For issues, questions, or suggestions, please open an issue on the repository.
+- **Issues:** [GitHub Issues](https://github.com/Prince77-7/quranMCP/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/Prince77-7/quranMCP/discussions)
+- **NPM:** [@quranmcp/server](https://www.npmjs.com/package/@quranmcp/server)
+
+## 📚 More Examples
+
+See [EXAMPLES.md](EXAMPLES.md) for detailed usage examples.
 
 ---
 
 **Made with ❤️ for the Muslim community and AI enthusiasts**
+
+**Status:** 🟢 Live on NPM | ✅ Ready to Use | 🚀 Revolutionary Search Enabled
 

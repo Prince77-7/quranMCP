@@ -3,7 +3,7 @@
 /**
  * Quran MCP Server
  * A comprehensive Model Context Protocol server for Islamic resources
- * 
+ *
  * Provides access to:
  * - Quran text (Arabic and translations)
  * - Tafsir (Quranic commentary)
@@ -14,25 +14,31 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  Tool,
+    CallToolRequestSchema,
+    ListToolsRequestSchema,
+    Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 // Import tools
-import { getTafsir, listTafsirSources } from './tools/tafsir.js';
-import { getHadith, listHadithCollections, getRandomHadith } from './tools/hadith.js';
+import { SURAH_INFO, getSurahInfo } from './constants/index.js';
+import { getAllCacheStats } from './services/cache.js';
+import { getHadith, getRandomHadith, listHadithCollections } from './tools/hadith.js';
 import {
-  getQuranVerse,
-  getFullSurah,
-  listTranslations,
-  getRandomVerse
+    getFullSurah,
+    getQuranVerse,
+    getRandomVerse,
+    listTranslations
 } from './tools/quran.js';
 import {
-  getRecitationURL,
-  listReciters
+    getRecitationURL,
+    listReciters
 } from './tools/recitation.js';
-import { getAllCacheStats } from './services/cache.js';
-import { SURAH_INFO, getSurahInfo } from './constants/index.js';
+import {
+    searchHadith,
+    searchHadithByTopic,
+    searchQuran,
+    searchQuranByTopic
+} from './tools/search.js';
+import { getTafsir, listTafsirSources } from './tools/tafsir.js';
 import { QuranMCPError } from './types/index.js';
 
 // Create server instance
@@ -271,6 +277,110 @@ const tools: Tool[] = [
       properties: {},
     },
   },
+  {
+    name: 'search_quran',
+    description: 'Search the Quran by keywords or phrases. This powerful tool allows you to find verses containing specific words or concepts without knowing the exact surah and ayah numbers. Perfect for finding verses about specific topics like "patience", "prayer", "mercy", etc. The AI agent can use natural language queries to search through the entire Quran.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query - keywords or phrases to search for in the Quran. Can be single words like "patience" or phrases like "those who believe". Minimum 2 characters.',
+        },
+        translation: {
+          type: 'string',
+          description: 'Translation to search in (default: en.sahih). Options: en.asad, en.sahih, en.pickthall, en.yusufali, en.hilali',
+          default: 'en.sahih',
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 20, max: 50)',
+          default: 20,
+          maximum: 50,
+        },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'search_hadith',
+    description: 'Search Hadith collections by keywords or phrases. Find hadiths about specific topics without knowing exact hadith numbers. Search across all major collections (Bukhari, Muslim, Abu Dawud, Tirmidhi, Nasai, Ibn Majah) or specific ones. Perfect for queries like "prayer times", "charity", "manners", etc.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query - keywords or phrases to search for in hadiths. Minimum 2 characters.',
+        },
+        collections: {
+          type: 'array',
+          description: 'Specific collections to search in (optional). If not specified, searches all collections. Options: bukhari, muslim, abudawud, tirmidhi, nasai, ibnmajah',
+          items: {
+            type: 'string',
+            enum: ['bukhari', 'muslim', 'abudawud', 'tirmidhi', 'nasai', 'ibnmajah'],
+          },
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 20, max: 50)',
+          default: 20,
+          maximum: 50,
+        },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'search_quran_by_topic',
+    description: 'Search the Quran by common Islamic topics. This tool uses predefined topic mappings to find relevant verses. Topics include: prayer, patience, charity, faith, paradise, hell, prophet, allah, mercy, justice, knowledge, family, death, creation, guidance. The AI understands these topics and can suggest them to users.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        topic: {
+          type: 'string',
+          description: 'Topic to search for. Common topics: prayer, patience, charity, faith, paradise, hell, prophet, allah, mercy, justice, knowledge, family, death, creation, guidance',
+        },
+        translation: {
+          type: 'string',
+          description: 'Translation to search in (default: en.sahih)',
+          default: 'en.sahih',
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 10)',
+          default: 10,
+        },
+      },
+      required: ['topic'],
+    },
+  },
+  {
+    name: 'search_hadith_by_topic',
+    description: 'Search Hadith collections by common Islamic topics. Uses predefined topic mappings for better results. Topics include: prayer, fasting, charity, hajj, faith, prophet, companions, knowledge, manners, family, marriage, death, jihad, repentance. The AI can suggest these topics to users based on their questions.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        topic: {
+          type: 'string',
+          description: 'Topic to search for. Common topics: prayer, fasting, charity, hajj, faith, prophet, companions, knowledge, manners, family, marriage, death, jihad, repentance',
+        },
+        collections: {
+          type: 'array',
+          description: 'Specific collections to search in (optional)',
+          items: {
+            type: 'string',
+            enum: ['bukhari', 'muslim', 'abudawud', 'tirmidhi', 'nasai', 'ibnmajah'],
+          },
+        },
+        max_results: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 10)',
+          default: 10,
+        },
+      },
+      required: ['topic'],
+    },
+  },
 ];
 
 // Handle list tools request
@@ -459,6 +569,58 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
+      case 'search_quran': {
+        const { query, translation = 'en.sahih', max_results = 20 } = args as any;
+        const result = await searchQuran(query, translation, max_results);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'search_hadith': {
+        const { query, collections, max_results = 20 } = args as any;
+        const result = await searchHadith(query, collections, max_results);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'search_quran_by_topic': {
+        const { topic, translation = 'en.sahih', max_results = 10 } = args as any;
+        const result = await searchQuranByTopic(topic, translation, max_results);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'search_hadith_by_topic': {
+        const { topic, collections, max_results = 10 } = args as any;
+        const result = await searchHadithByTopic(topic, collections, max_results);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
       default:
         throw new QuranMCPError(
           `Unknown tool: ${name}`,
@@ -500,7 +662,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  
+
   console.error('Quran MCP Server running on stdio');
   console.error('Available tools:', tools.length);
 }

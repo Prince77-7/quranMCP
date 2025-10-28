@@ -18,6 +18,7 @@ const tafsirCache = new NodeCache({ ...CACHE_CONFIG, stdTTL: 7200 }); // 2 hours
 const hadithCache = new NodeCache({ ...CACHE_CONFIG, stdTTL: 7200 }); // 2 hours for hadith
 const quranCache = new NodeCache({ ...CACHE_CONFIG, stdTTL: 86400 }); // 24 hours for Quran text
 const recitationCache = new NodeCache({ ...CACHE_CONFIG, stdTTL: 86400 }); // 24 hours for recitation URLs
+const searchCache = new NodeCache({ ...CACHE_CONFIG, stdTTL: 1800 }); // 30 minutes for search results
 
 /**
  * Generic cache wrapper with type safety
@@ -84,6 +85,7 @@ export const tafsirCacheService = new CacheService(tafsirCache);
 export const hadithCacheService = new CacheService(hadithCache);
 export const quranCacheService = new CacheService(quranCache);
 export const recitationCacheService = new CacheService(recitationCache);
+export const searchCacheService = new CacheService(searchCache);
 
 /**
  * Get all cache statistics
@@ -94,6 +96,7 @@ export function getAllCacheStats() {
     hadith: hadithCache.getStats(),
     quran: quranCache.getStats(),
     recitation: recitationCache.getStats(),
+    search: searchCache.getStats(),
   };
 }
 
@@ -105,5 +108,6 @@ export function clearAllCaches() {
   hadithCache.flushAll();
   quranCache.flushAll();
   recitationCache.flushAll();
+  searchCache.flushAll();
 }
 
