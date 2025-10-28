@@ -1,10 +1,10 @@
 # Cloudflare Workers configuration for Quran MCP Server
-# Streamable HTTP/SSE server deployment
+# MCP-compliant JSON-RPC 2.0 HTTP server deployment
 
 name = "quran-mcp-server"
 main = "dist/http-server.js"
-compatibility_date = "2024-01-01"
-node_compat = true
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
 
 # Account details (will be set via wrangler login)
 # account_id = "your-account-id"
