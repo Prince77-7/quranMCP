@@ -5,7 +5,11 @@
 
 A **revolutionary** Model Context Protocol (MCP) server that gives AI assistants powerful access to Islamic resources. The first MCP server with **intelligent keyword search** for Quran and Hadith - no more needing exact verse numbers!
 
-## ✨ What Makes This Revolutionary?
+<a href="https://glama.ai/mcp/servers/@Prince77-7/quranMCP">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@Prince77-7/quranMCP/badge" alt="Quran Server MCP server" />
+</a>
+
+## ✨ What Makes This Revolutionary? 
 
 ### 🔍 **Intelligent Search** (NEW!)
 - **Search Quran by Keywords**: Find verses about "patience", "prayer", "mercy" without knowing verse numbers
@@ -320,7 +324,7 @@ npm run inspector
 This server aggregates data from multiple trusted Islamic resources:
 
 - **Tafsir**: [spa5k/tafsir_api](https://github.com/spa5k/tafsir_api)
-- **Hadith**: [fawazahmed0/hadith-api](https://github.com/fawazahmed0/hadith-api)
+- **Hadith**: [fawazahmed0/hadith-api](https://github.com/fawazahmed0/hith-api)
 - **Quran Arabic**: [fawazahmed0/quran-api](https://github.com/fawazahmed0/quran-api)
 - **Quran Translations**: [AlQuran Cloud API](https://alquran.cloud/api)
 - **Recitations**: [EveryAyah.com](https://everyayah.com)
@@ -403,4 +407,3 @@ See [EXAMPLES.md](EXAMPLES.md) for detailed usage examples.
 **Made with ❤️ for the Muslim community and AI enthusiasts**
 
 **Status:** 🟢 Live on NPM | ✅ Ready to Use | 🚀 Revolutionary Search Enabled
-
